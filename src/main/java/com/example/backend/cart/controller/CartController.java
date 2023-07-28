@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -22,13 +21,13 @@ public class CartController {
     private final JwtService jwtService;
     private final CartService cartService;
 
-    private void valid(String token) {
-        if (!jwtService.isValid(token)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
+//    private void valid(String token) {
+//        if (!jwtService.isValid(token)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+//    }
 
     @PostMapping("/api/cart/items/{itemId}")
     public ResponseEntity<CartDto> pushCartItem(@PathVariable Long itemId, @CookieValue(value = "token", required = false) String token) {
-        valid(token);
+        jwtService.isValid(token);
         Long memberId = jwtService.getId(token);
         CartDto cart = cartService.findByMemberIdAndItemId(memberId, itemId);
 //        List<ItemDto> items = itemService.findAll();
@@ -37,7 +36,7 @@ public class CartController {
 
     @GetMapping("/api/cart/items")
     public ResponseEntity<List<ItemDto>> getCartItems(@CookieValue(value = "token", required = false) String token) {
-        valid(token);
+        jwtService.isValid(token);
 
         Long memberId = jwtService.getId(token);
         List<CartDto> list = cartService.findByMemberId(memberId);
@@ -51,7 +50,7 @@ public class CartController {
 
     @DeleteMapping("/api/cart/items/{itemId}")
     public ResponseEntity deleteItem(@PathVariable Long itemId, @CookieValue(value = "token", required = false)String token) {
-        valid(token);
+        jwtService.isValid(token);
         cartService.deleteCart(jwtService.getId(token), itemId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

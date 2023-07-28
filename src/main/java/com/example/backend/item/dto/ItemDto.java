@@ -1,7 +1,6 @@
 package com.example.backend.item.dto;
 
 import com.example.backend.item.entity.Item;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,6 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ItemDto {
     private Long id;
     private String name;

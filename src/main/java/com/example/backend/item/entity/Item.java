@@ -2,10 +2,12 @@ package com.example.backend.item.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Table(name = "items")
 @Getter
 @Entity
+@NoArgsConstructor
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +24,10 @@ public class Item {
     @Column
     private Integer discountPer;
 
-
+    public Item(String name, String imgPath, Integer price, Integer discountPer) {
+        this.name = name;
+        this.imgPath = imgPath;
+        this.price = price;
+        this.discountPer = discountPer;
+    }
 }

@@ -22,8 +22,7 @@ public class CartService {
         CartDto cartDto = new CartDto();
         Cart cart = cartRepository.findByMemberIdAndItemId(memberId, itemId);
         if(cart==null){
-            Cart newCart = new Cart();
-            newCart.makeCart(memberId, itemId);
+            Cart newCart = new Cart(memberId, itemId);
             cartDto.entityToDto(cartRepository.save(newCart));
             return cartDto;
         }

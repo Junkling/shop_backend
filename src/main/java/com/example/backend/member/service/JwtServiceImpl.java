@@ -3,7 +3,9 @@ package com.example.backend.member.service;
 import io.jsonwebtoken.*;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
@@ -56,8 +58,11 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public boolean isValid(String token) {
-        return this.getClaims(token) != null;
+    public void isValid(String token) {
+        if(this.getClaims(token) == null){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);}
+
+        return;
     }
 
     @Override
