@@ -21,7 +21,7 @@ public class OrderService {
     }
 
     public List<OrderResponse> findById(Long memberId) {
-        List<Order> list = orderRepository.findByMemberId(memberId);
+        List<Order> list = orderRepository.findByMemberIdOrderByIdDesc(memberId);
         List<OrderResponse> dtoList = new OrderResponse().toDtoList(list);
         return dtoList;
     }

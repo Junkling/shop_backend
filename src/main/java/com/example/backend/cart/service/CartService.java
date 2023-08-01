@@ -33,4 +33,7 @@ public class CartService {
     public void deleteCart(Long memberId, Long itemId) {
         cartRepository.delete(cartRepository.findByMemberIdAndItemId(memberId, itemId));
     }
+    public void deleteByMemberId(Long memberId) {
+        cartRepository.deleteByMemberId(memberId);
+    }
 }
