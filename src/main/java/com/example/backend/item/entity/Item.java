@@ -1,8 +1,11 @@
 package com.example.backend.item.entity;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Table(name = "items")
 @Getter
@@ -23,6 +26,14 @@ public class Item {
     private Integer price;
     @Column
     private Integer discountPer;
+
+    @Column(name = "quantity")
+    @Max(999)
+    @Min(0)
+    private Integer quantity;
+
+    @Column(name = "member_id")
+    private Long memberId;
 
     public Item(String name, String imgPath, Integer price, Integer discountPer) {
         this.name = name;
