@@ -1,9 +1,14 @@
 package com.example.backend.member.service;
 
+import com.example.backend.config.auth.PrincipalDetails;
+import com.example.backend.member.dto.MemberDto;
 import io.jsonwebtoken.*;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,11 +21,11 @@ import java.util.Map;
 @Service
 @Slf4j
 public class JwtServiceImpl implements JwtService {
-
-    private final String secretKey = "asdfsdfsadfsdfadsfsdafsafBCNCVLMCBLLNMRMERQKKRAASNDMFASFDKsadf@#$#!$@#$!@#$!@#$!@%QWEDASDGFDZJLS<MNsfsda!@#@!%$%QASA";
+    @Value("${spring.jwt.secret}")
+    private String secretKey;
 
     @Override
-    public String getToken(String key, Object value) {
+    public String getToken(MemberDto memberDto) {
         Date expTime = new Date();
         expTime.setTime(expTime.getTime() + 1000 * 60 * 30);
         Key signKey = setSignKey();
@@ -29,7 +34,10 @@ public class JwtServiceImpl implements JwtService {
         headerMap.put("alg", "HS256");
 
         Map<String, Object> map = new HashMap<>();
-        map.put(key, value);
+        map.put("id", memberDto.getId());
+        map.put("email", memberDto.getEmail());
+        map.put("role", memberDto.getRole());
+
         JwtBuilder builder = Jwts.builder().setHeader(headerMap)
                 .setClaims(map)
                 .setExpiration(expTime)
@@ -69,5 +77,16 @@ public class JwtServiceImpl implements JwtService {
     public Long getId(String token) {
         Claims claims = this.getClaims(token);
         return claims == null ? 0 : Long.parseLong(claims.get("id").toString());
+    }
+    @SuppressWarnings("unchecked")
+    public Authentication getAuthentication(String token) {
+
+        // 토큰 기반으로 유저의 정보 파싱
+        Claims claims = Jwts.parser().setSigningKey(setSignKey()).parseClaimsJws(token).getBody();
+
+        Long userPk = claims.get("id", Long.class);
+        String email = claims.get("email", String.class);
+        PrincipalDetails userDetails = new PrincipalDetails(userPk, email);
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }
