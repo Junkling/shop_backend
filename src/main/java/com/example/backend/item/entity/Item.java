@@ -1,5 +1,6 @@
 package com.example.backend.item.entity;
 
+import com.example.backend.item.dto.ItemDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,10 +36,16 @@ public class Item {
     @Column(name = "member_id")
     private Long memberId;
 
-    public Item(String name, String imgPath, Integer price, Integer discountPer) {
+    public Item(String name, String imgPath, Integer price, Integer discountPer, Integer quantity, Long memberId) {
         this.name = name;
         this.imgPath = imgPath;
         this.price = price;
         this.discountPer = discountPer;
+        this.quantity = quantity;
+        this.memberId = memberId;
+    }
+    public ItemDto toDto() {
+        ItemDto itemDto = new ItemDto(this.id, this.name, this.imgPath, this.price, this.discountPer, this.quantity, this.memberId);
+        return itemDto;
     }
 }
