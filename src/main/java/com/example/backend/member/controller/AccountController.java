@@ -5,11 +5,14 @@ import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.dto.MemberRequest;
 import com.example.backend.member.service.JwtServiceImpl;
 import com.example.backend.member.service.MemberService;
+import com.example.backend.validator.MemberValidator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -23,6 +26,8 @@ import java.util.Map;
 public class AccountController {
     private final MemberService memberService;
     private final JwtServiceImpl jwtService;
+    private final MemberValidator memberValidator;
+    private final ObjectMapper objectMapper;
 
     @PostMapping("/api/account/login")
     public ResponseEntity login(@RequestBody Map<String, String> param, HttpServletResponse res) throws Exception {
@@ -38,9 +43,14 @@ public class AccountController {
     }
 
     @PostMapping("/api/account/signup")
-    public ResponseEntity<MemberDto> signup(@Valid @RequestBody MemberRequest res) throws Exception {
+    public ResponseEntity signup(@Valid @RequestBody MemberRequest res, BindingResult bindingResult) throws Exception {
+        memberValidator.validate(res, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity(objectMapper.writeValueAsString(bindingResult), HttpStatus.BAD_REQUEST);
+        }
+
         MemberDto memberDto = memberService.signup(res);
-        return new ResponseEntity<>(memberDto, HttpStatus.OK);
+        return new ResponseEntity(memberDto, HttpStatus.OK);
     }
 
     @PostMapping("/api/account/logout")

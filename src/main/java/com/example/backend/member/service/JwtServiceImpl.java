@@ -1,6 +1,6 @@
 package com.example.backend.member.service;
 
-import com.example.backend.config.auth.PrincipalDetails;
+import com.example.backend.member.auth.PrincipalDetails;
 import com.example.backend.member.dto.MemberDto;
 import io.jsonwebtoken.*;
 import jakarta.xml.bind.DatatypeConverter;

@@ -1,4 +1,4 @@
-package com.example.backend.config.auth;
+package com.example.backend.member.auth;
 
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;

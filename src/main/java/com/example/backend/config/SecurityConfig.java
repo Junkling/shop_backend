@@ -1,4 +1,4 @@
-package com.example.backend.config.auth;
+package com.example.backend.config;
 
 import com.example.backend.member.service.JwtService;
 import lombok.RequiredArgsConstructor;
