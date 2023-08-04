@@ -86,7 +86,9 @@ public class JwtServiceImpl implements JwtService {
 
         Long userPk = claims.get("id", Long.class);
         String email = claims.get("email", String.class);
-        PrincipalDetails userDetails = new PrincipalDetails(userPk, email);
+        String role = claims.get("role", String.class);
+
+        PrincipalDetails userDetails = new PrincipalDetails(userPk, email,role);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }

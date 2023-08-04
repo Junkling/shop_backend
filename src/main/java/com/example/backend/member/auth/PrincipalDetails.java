@@ -17,14 +17,16 @@ public class PrincipalDetails implements UserDetails {
 
     private Long id;
     private String email;
+    private String role;
 
     public PrincipalDetails(Member member) {
         this.member = member;
     }
 
-    public PrincipalDetails(Long id, String email) {
+    public PrincipalDetails(Long id, String email, String role) {
         this.id = id;
         this.email = email;
+        this.role = role;
     }
 
     @Override

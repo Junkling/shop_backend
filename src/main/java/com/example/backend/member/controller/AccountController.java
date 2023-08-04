@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class AccountController {
+public class AccountController  {
     private final MemberService memberService;
     private final JwtServiceImpl jwtService;
     private final MemberValidator memberValidator;
@@ -44,11 +46,13 @@ public class AccountController {
 
     @PostMapping("/api/account/signup")
     public ResponseEntity signup(@Valid @RequestBody MemberRequest res, BindingResult bindingResult) throws Exception {
-        memberValidator.validate(res, bindingResult);
+        memberValidator.validate(res);
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity(objectMapper.writeValueAsString(bindingResult), HttpStatus.BAD_REQUEST);
+            List<String> errors = new ArrayList<>();
+            bindingResult.getAllErrors()
+                    .forEach(c -> errors.add(c.getDefaultMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
         }
-
         MemberDto memberDto = memberService.signup(res);
         return new ResponseEntity(memberDto, HttpStatus.OK);
     }
@@ -76,5 +80,7 @@ public class AccountController {
         log.info("null");
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
+
+
 }
 
