@@ -19,14 +19,28 @@ public class ItemService {
         return new ItemDto().toDtoList(all);
     }
 
+    public ItemDto findById(Long itemId) {
+        Item item = itemRepository.findById(itemId).orElseThrow();
+        return item.toDto();
+    }
+
+    public void update(Long itemId, ItemRequest req) {
+        Item item = itemRepository.findById(itemId).orElseThrow();
+        item.updateEntity(req);
+
+    }
     public List<ItemDto> findByItemIds(List<Long> ids) {
         List<Item> byIdIn = itemRepository.findByIdIn(ids);
         return new ItemDto().toDtoList(byIdIn);
     }
 
     public ItemDto save(ItemRequest req) {
-        Item item = new Item(req.getName(), req.getImgPath(), req.getPrice(), req.getDiscountPer(), req.getQuantity(), req.getMemberId());
+        Item item = new Item(req);
         itemRepository.save(item);
         return item.toDto();
+    }
+
+    public void delete(Long itemId) {
+        itemRepository.delete(itemRepository.findById(itemId).orElseThrow());
     }
 }

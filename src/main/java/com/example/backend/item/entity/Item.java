@@ -1,6 +1,7 @@
 package com.example.backend.item.entity;
 
 import com.example.backend.item.dto.ItemDto;
+import com.example.backend.item.dto.ItemRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,14 +37,24 @@ public class Item {
     @Column(name = "member_id")
     private Long memberId;
 
-    public Item(String name, String imgPath, Integer price, Integer discountPer, Integer quantity, Long memberId) {
-        this.name = name;
-        this.imgPath = imgPath;
-        this.price = price;
-        this.discountPer = discountPer;
-        this.quantity = quantity;
-        this.memberId = memberId;
+
+    public Item(ItemRequest req) {
+        this.name = req.getName();
+        this.imgPath = req.getImgPath();
+        this.price = req.getPrice();
+        this.discountPer = req.getDiscountPer();
+        this.quantity = req.getQuantity();
+        this.memberId = req.getMemberId();
     }
+
+    public void updateEntity(ItemRequest req) {
+        this.name = req.getName();
+        this.imgPath = req.getImgPath();;
+        this.price = req.getPrice();
+        this.discountPer = req.getDiscountPer();
+        this.quantity = req.getQuantity();
+    }
+
     public ItemDto toDto() {
         ItemDto itemDto = new ItemDto(this.id, this.name, this.imgPath, this.price, this.discountPer, this.quantity, this.memberId);
         return itemDto;
