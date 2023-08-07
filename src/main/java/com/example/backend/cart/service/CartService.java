@@ -23,11 +23,10 @@ public class CartService {
         Cart cart = cartRepository.findByMemberIdAndItemId(memberId, itemId);
         if(cart==null){
             Cart newCart = new Cart(memberId, itemId);
-            cartDto.entityToDto(cartRepository.save(newCart));
-            return cartDto;
+            Cart save = cartRepository.save(newCart);
+            return save.toDto();
         }
-        cartDto.entityToDto(cart);
-        return cartDto;
+        return cart.toDto();
     }
 
     public void deleteCart(Long memberId, Long itemId) {

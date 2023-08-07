@@ -14,6 +14,7 @@ import javax.validation.constraints.Min;
 @Entity
 @NoArgsConstructor
 public class Item {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,17 +35,23 @@ public class Item {
     @Min(0)
     private Integer quantity;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @Column(name = "seller_id")
+    private Long sellerId;
 
+    @Column(name = "sell_count")
+    private Long sellCount;
+//
+//    @Column(name = "cart_count")
+//    private Long cartCount;
 
-    public Item(ItemRequest req) {
+    public Item(ItemRequest req, Long sellerId) {
         this.name = req.getName();
         this.imgPath = req.getImgPath();
         this.price = req.getPrice();
         this.discountPer = req.getDiscountPer();
         this.quantity = req.getQuantity();
-        this.memberId = req.getMemberId();
+        this.sellerId = sellerId;
+        this.sellCount = 0L;
     }
 
     public void updateEntity(ItemRequest req) {
@@ -55,8 +62,13 @@ public class Item {
         this.quantity = req.getQuantity();
     }
 
+    public void orderItem() {
+        this.quantity--;
+        this.sellCount++;
+    }
+
     public ItemDto toDto() {
-        ItemDto itemDto = new ItemDto(this.id, this.name, this.imgPath, this.price, this.discountPer, this.quantity, this.memberId);
+        ItemDto itemDto = new ItemDto(this.id, this.name, this.imgPath, this.price, this.discountPer, this.quantity, this.sellerId);
         return itemDto;
     }
 }

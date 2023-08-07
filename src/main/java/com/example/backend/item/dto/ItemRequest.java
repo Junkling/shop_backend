@@ -13,5 +13,4 @@ public class ItemRequest {
     private Integer price;
     private Integer discountPer;
     private Integer quantity;
-    private Long memberId;
 }

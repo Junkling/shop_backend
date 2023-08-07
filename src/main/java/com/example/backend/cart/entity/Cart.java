@@ -1,5 +1,6 @@
 package com.example.backend.cart.entity;
 
+import com.example.backend.cart.dto.CartDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,8 +21,13 @@ public class Cart {
     @Column(length = 50, nullable = false)
     private Long itemId;
 
+
     public Cart(Long memberId, Long itemId) {
         this.memberId = memberId;
         this.itemId = itemId;
+    }
+
+    public CartDto toDto() {
+        return new CartDto(this.getId(), this.getMemberId(), this.getItemId());
     }
 }

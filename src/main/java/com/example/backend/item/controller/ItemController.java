@@ -40,10 +40,10 @@ public class ItemController {
     }
 
     @Transactional
-    @PostMapping("/api/seller/items/save")
+    @PostMapping("/api/seller/items")
     public ResponseEntity saveItem(@RequestBody ItemRequest req, @AuthenticationPrincipal MemberAdapter memberAdapter) {
         checkAuth(memberAdapter.getRole());
-        ItemDto save = itemService.save(req);
+        ItemDto save = itemService.save(req,memberAdapter.getId());
         return new ResponseEntity(save, HttpStatus.OK);
     }
 

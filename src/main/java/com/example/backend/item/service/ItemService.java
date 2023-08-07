@@ -34,13 +34,21 @@ public class ItemService {
         return new ItemDto().toDtoList(byIdIn);
     }
 
-    public ItemDto save(ItemRequest req) {
-        Item item = new Item(req);
+    public ItemDto save(ItemRequest req, Long sellerId) {
+        Item item = new Item(req, sellerId);
         itemRepository.save(item);
         return item.toDto();
     }
 
     public void delete(Long itemId) {
         itemRepository.delete(itemRepository.findById(itemId).orElseThrow());
+    }
+
+    public void orderItem(List<Long> itemIds) {
+        List<Item> byIdIn = itemRepository.findByIdIn(itemIds);
+        for (Item item : byIdIn) {
+            item.orderItem();
+            itemRepository.save(item);
+        }
     }
 }

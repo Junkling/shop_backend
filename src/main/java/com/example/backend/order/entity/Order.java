@@ -1,21 +1,27 @@
 package com.example.backend.order.entity;
 
+import com.example.backend.order.dto.OrderRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
+
 @Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "member_id")
     private Long memberId;
+
+    @Column(name = "seller_id")
+    private Long sellerId;
 
     @Column(length = 500, nullable = false)
     private String name;
@@ -29,15 +35,15 @@ public class Order {
     @Column(length = 16)
     private String cardNumber;
 
-    @Column(length = 500, nullable = false)
-    private String items;
+    @Column(name = "order_time")
+    private LocalDateTime orderTime;
 
-    public Order(Long memberId, String name, String address, String payment, String cardNumber, String items) {
+    public Order(Long memberId, Long sellerId, OrderRequest orderRequest) {
         this.memberId = memberId;
-        this.name = name;
-        this.address = address;
-        this.payment = payment;
-        this.cardNumber = cardNumber;
-        this.items = items;
+        this.sellerId = sellerId;
+        this.name = orderRequest.getName();
+        this.address = orderRequest.getAddress();
+        this.payment = orderRequest.getPayment();
+        this.cardNumber = orderRequest.getCardNumber();
     }
 }

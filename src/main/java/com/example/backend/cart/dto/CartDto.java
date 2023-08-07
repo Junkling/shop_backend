@@ -18,19 +18,13 @@ public class CartDto {
 
     private Long itemId;
 
-    public void entityToDto(Cart entity) {
-        this.id = entity.getId();
-        this.memberId = entity.getMemberId();
-        this.itemId = entity.getItemId();
-    }
+
 
     public List<CartDto> toDtoList(List<Cart> carts) {
         ArrayList<CartDto> list = new ArrayList<>();
         if (!carts.isEmpty() && carts != null) {
             for (Cart cart : carts) {
-                CartDto cartDto = new CartDto();
-                cartDto.entityToDto(cart);
-                list.add(cartDto);
+                list.add(cart.toDto());
             }
         }
         return list;
