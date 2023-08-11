@@ -1,5 +1,6 @@
 package com.example.backend.item.entity;
 
+import com.example.backend.attachment.entity.Attachment;
 import com.example.backend.item.dto.ItemDto;
 import com.example.backend.item.dto.ItemRequest;
 import lombok.Getter;
@@ -22,8 +23,14 @@ public class Item {
     @Column(length = 100, nullable = false)
     private String name;
 
-    @Column(length = 100)
-    private String imgPath;
+    @OneToOne(
+            mappedBy = "item",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private Attachment imageFiles;
+//    @Column
+//    private String imgPath;
 
     @Column
     private Integer price;
@@ -46,7 +53,6 @@ public class Item {
 
     public Item(ItemRequest req, Long sellerId) {
         this.name = req.getName();
-        this.imgPath = req.getImgPath();
         this.price = req.getPrice();
         this.discountPer = req.getDiscountPer();
         this.quantity = req.getQuantity();
@@ -56,7 +62,6 @@ public class Item {
 
     public void updateEntity(ItemRequest req) {
         this.name = req.getName();
-        this.imgPath = req.getImgPath();;
         this.price = req.getPrice();
         this.discountPer = req.getDiscountPer();
         this.quantity = req.getQuantity();
@@ -68,7 +73,8 @@ public class Item {
     }
 
     public ItemDto toDto() {
-        ItemDto itemDto = new ItemDto(this.id, this.name, this.imgPath, this.price, this.discountPer, this.quantity, this.sellerId);
+        ItemDto itemDto = new ItemDto(this.id, this.name, "/img/"+this.getImageFiles().getStoreName(), this.price, this.discountPer, this.quantity, this.sellerId);
         return itemDto;
     }
+
 }

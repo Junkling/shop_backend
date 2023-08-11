@@ -41,6 +41,7 @@ public class AccountController  {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         res.addCookie(cookie);
+        res.addHeader("Authorization", memberDto.getRole());
         return new ResponseEntity<>(memberDto, HttpStatus.OK);
     }
 

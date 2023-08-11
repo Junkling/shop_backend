@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemDto {
+
     private Long id;
     private String name;
     private String imgPath;
@@ -32,5 +33,9 @@ public class ItemDto {
             }
         }
         return list;
+    }
+
+    public void changeImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 }

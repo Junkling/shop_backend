@@ -1,5 +1,6 @@
 package com.example.backend.item.service;
 
+import com.example.backend.attachment.repository.AttachmentRepository;
 import com.example.backend.item.dto.ItemDto;
 import com.example.backend.item.dto.ItemRequest;
 import com.example.backend.item.entity.Item;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
+    public final AttachmentRepository attachmentRepository;
 
     public List<ItemDto> findAll() {
         List<Item> all = itemRepository.findAll();
@@ -34,10 +36,10 @@ public class ItemService {
         return new ItemDto().toDtoList(byIdIn);
     }
 
-    public ItemDto save(ItemRequest req, Long sellerId) {
+    public Item save(ItemRequest req, Long sellerId) {
         Item item = new Item(req, sellerId);
-        itemRepository.save(item);
-        return item.toDto();
+        Item save = itemRepository.save(item);
+        return save;
     }
 
     public void delete(Long itemId) {
