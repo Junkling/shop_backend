@@ -9,6 +9,7 @@ import com.example.backend.item.dto.ItemRequest;
 import com.example.backend.item.entity.Item;
 import com.example.backend.item.service.ItemService;
 import com.example.backend.member.adapter.MemberAdapter;
+import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.service.JwtService;
 import com.example.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,8 @@ public class ItemController {
 //    @PreAuthorize("hasRole('seller')")
     public ResponseEntity saveItem(@RequestPart ItemRequest itemRequest, @RequestPart(value = "image", required = false) MultipartFile image, @CookieValue(value = "token", required = false) String token) throws IOException {
         log.info("imageName={}",image);
-        Item save = itemService.save(itemRequest, jwtService.getId(token));
+        MemberDto dto = memberService.findByEmail(jwtService.getClaims(token).getSubject());
+        Item save = itemService.save(itemRequest, dto.getId());
         Attachment attachment = fileStore.storeFile(image, save);
         fileStore.save(attachment);
         return new ResponseEntity(save.getId(), HttpStatus.OK);

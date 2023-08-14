@@ -1,12 +1,12 @@
 package com.example.backend.member.controller;
 
+import com.example.backend.member.auth.TokenInfo;
 import com.example.backend.member.dto.LoginDto;
 import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.dto.MemberRequest;
 import com.example.backend.member.service.JwtServiceImpl;
 import com.example.backend.member.service.MemberService;
 import com.example.backend.validator.MemberValidator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,21 +28,22 @@ import java.util.Map;
 public class AccountController  {
     private final MemberService memberService;
     private final JwtServiceImpl jwtService;
+
     private final MemberValidator memberValidator;
-    private final ObjectMapper objectMapper;
 
     @PostMapping("/api/account/login")
     public ResponseEntity login(@RequestBody Map<String, String> param, HttpServletResponse res) throws Exception {
         LoginDto loginDto = new LoginDto(param.get("email"), param.get("password"));
 
-        MemberDto memberDto = memberService.login(loginDto);
-        String token = jwtService.getToken(memberDto);
-        Cookie cookie = new Cookie("token", token);
+        TokenInfo token = memberService.login(loginDto);
+
+//        String token = jwtService.getToken(memberDto);
+        Cookie cookie = new Cookie("token", token.getAccessToken());
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         res.addCookie(cookie);
-        res.addHeader("Authorization", memberDto.getRole());
-        return new ResponseEntity<>(memberDto, HttpStatus.OK);
+        res.setHeader("auth",token.getAccessToken());
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping("/api/account/signup")
@@ -73,9 +74,8 @@ public class AccountController  {
         log.info("token={}", token);
         Claims claims = jwtService.getClaims(token);
         if (claims != null) {
-            long id = Long.parseLong(claims.get("id").toString());
-            log.info("id={}", id);
-            MemberDto dto = memberService.findById(id);
+            String name = claims.getSubject();
+            MemberDto dto = memberService.findByEmail(name);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         }
         log.info("null");
