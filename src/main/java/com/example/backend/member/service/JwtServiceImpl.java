@@ -102,38 +102,19 @@ public class JwtServiceImpl implements JwtService {
                 .setSigningKey(setSignKey())
                 .parseClaimsJws(token)
                 .getBody();
-        return claims == null ? 0 : Long.parseLong(claims.getSubject());
+        return claims == null ? 0 : principalDetailsService.getId(claims.getSubject());
     }
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
-        // 토큰 복호화
-//        Claims claims = parseClaims(accessToken);
-//
-//        if (claims.get("auth") == null) {
-//            throw new RuntimeException("인증되지 않은 사용자");
-//        }
-//
-//        // 클레임에서 권한 정보 가져오기
-//        Collection<? extends GrantedAuthority> authorities =
-//                Arrays.stream(claims.get("auth").toString().split(","))
-//                        .map(SimpleGrantedAuthority::new)
-//                        .collect(Collectors.toList());
-//
-//        // UserDetails 객체를 만들어서 Authentication 리턴
-//        UserDetails principal = new User(claims.getSubject(), "", authorities);
-//        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
         UserDetails userDetails = principalDetailsService.loadUserByUsername(this.getUserPk(accessToken));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
     // 토큰에서 회원 정보 추출
     public String getUserPk(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-    }
-    private Claims parseClaims(String accessToken) {
-        try {
-            return Jwts.parserBuilder().setSigningKey(setSignKey()).build().parseClaimsJws(accessToken).getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
+        Claims claims = Jwts.parser()
+                .setSigningKey(setSignKey())
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
     }
 }

@@ -42,8 +42,10 @@ public class AccountController  {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         res.addCookie(cookie);
-        res.setHeader("auth",token.getAccessToken());
-        return new ResponseEntity<>(token, HttpStatus.OK);
+//        res.setHeader("auth", token.getAccessToken());
+        MemberDto dto = memberService.findByEmail(loginDto.getEmail());
+        dto.changeAuth(token.getAccessToken());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PostMapping("/api/account/signup")
@@ -76,6 +78,7 @@ public class AccountController  {
         if (claims != null) {
             String name = claims.getSubject();
             MemberDto dto = memberService.findByEmail(name);
+            dto.changeAuth(token);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         }
         log.info("null");

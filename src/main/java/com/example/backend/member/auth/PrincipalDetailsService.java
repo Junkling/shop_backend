@@ -32,4 +32,8 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .roles(list.toArray(new String[0]))
                 .build();
     }
+
+    public Long getId(String name) {
+        return memberRepository.findByEmail(name).orElseThrow().getId();
+    }
 }

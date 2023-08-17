@@ -37,7 +37,7 @@ public class Member {
         this.role = role;
     }
     public MemberDto toDto() {
-        MemberDto memberDto = new MemberDto(this.id, this.email, this.role);
+        MemberDto memberDto = new MemberDto(this.id, this.email, this.role,null);
         return memberDto;
     }
 }

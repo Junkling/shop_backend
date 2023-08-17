@@ -1,24 +1,14 @@
 package com.example.backend.member.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberDto {
-
+public class MemberResponse {
     private Long id;
-
-    private String email;
-
     private String role;
-
     private String auth;
-
-    public void changeAuth(String auth) {
-        this.auth = auth;
-    }
-
 }

@@ -57,9 +57,9 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/api/cart/**","/api/orders/**","/api/seller/items").authenticated()
-//            .antMatchers("/api/seller/items").hasRole("seller")
-            .antMatchers().permitAll()
+            .antMatchers().authenticated()
+            .antMatchers("/api/seller/items").hasRole("seller")
+//            .antMatchers().permitAll()
             .anyRequest().permitAll()
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
