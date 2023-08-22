@@ -50,9 +50,7 @@ public class ItemController {
 
     @Transactional
     @PostMapping("/api/seller/items")
-//    @PreAuthorize("hasRole('seller')")
     public ResponseEntity saveItem(@RequestPart ItemRequest itemRequest, @RequestPart(value = "image", required = false) MultipartFile image, @CookieValue(value = "token", required = false) String token) throws IOException {
-        log.info("imageName={}",image);
         MemberDto dto = memberService.findByEmail(jwtService.getClaims(token).getSubject());
         dto.changeAuth(token);
         Item save = itemService.save(itemRequest, dto.getId());

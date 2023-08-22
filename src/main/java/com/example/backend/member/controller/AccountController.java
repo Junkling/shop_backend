@@ -36,13 +36,10 @@ public class AccountController  {
         LoginDto loginDto = new LoginDto(param.get("email"), param.get("password"));
 
         TokenInfo token = memberService.login(loginDto);
-
-//        String token = jwtService.getToken(memberDto);
         Cookie cookie = new Cookie("token", token.getAccessToken());
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         res.addCookie(cookie);
-//        res.setHeader("auth", token.getAccessToken());
         MemberDto dto = memberService.findByEmail(loginDto.getEmail());
         dto.changeAuth(token.getAccessToken());
         return new ResponseEntity<>(dto, HttpStatus.OK);

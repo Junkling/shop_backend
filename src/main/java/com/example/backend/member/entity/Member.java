@@ -3,6 +3,7 @@ package com.example.backend.member.entity;
 import com.example.backend.member.dto.MemberDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,6 +25,8 @@ public class Member {
     @Column(length = 50, nullable = false)
     private String role;
 
+    @Column(name = "create_date")
+    @CreatedDate
     private LocalDateTime createDate;
 
     @PrePersist

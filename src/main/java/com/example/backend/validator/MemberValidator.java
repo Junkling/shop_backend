@@ -9,17 +9,9 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class MemberValidator
-//        implements Validator
-        {
+public class MemberValidator{
     private final MemberRepository memberRepository;
 
-//    @Override
-//    public boolean supports(Class<?> clazz) {
-//        return MemberRequest.class.isAssignableFrom(clazz);
-//    }
-//
-//    @Override
     public void validate(Object target) {
         MemberRequest member = (MemberRequest) target;
         if (memberRepository.findByEmail(member.getEmail()) != null) {

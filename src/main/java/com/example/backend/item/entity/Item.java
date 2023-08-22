@@ -47,9 +47,6 @@ public class Item {
 
     @Column(name = "sell_count")
     private Long sellCount;
-//
-//    @Column(name = "cart_count")
-//    private Long cartCount;
 
     public Item(ItemRequest req, Long sellerId) {
         this.name = req.getName();

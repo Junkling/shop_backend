@@ -3,6 +3,7 @@ package com.example.backend.order.entity;
 import com.example.backend.order.dto.OrderRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class Order {
     private String cardNumber;
 
     @Column(name = "order_time")
+    @CreatedDate
     private LocalDateTime orderTime;
 
     public Order(Long memberId, Long sellerId, OrderRequest orderRequest) {
