@@ -70,7 +70,6 @@ public class AccountController  {
 
     @GetMapping("/api/account/check")
     public ResponseEntity check(@CookieValue(value = "token", required = false) String token) {
-        log.info("token={}", token);
         Claims claims = jwtService.getClaims(token);
         if (claims != null) {
             String name = claims.getSubject();
@@ -78,7 +77,6 @@ public class AccountController  {
             dto.changeAuth(token);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         }
-        log.info("null");
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 

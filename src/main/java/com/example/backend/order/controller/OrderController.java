@@ -4,6 +4,7 @@ import com.example.backend.cart.service.CartService;
 import com.example.backend.item.service.ItemService;
 import com.example.backend.member.service.JwtService;
 import com.example.backend.order.dto.OrderRequest;
+import com.example.backend.order.dto.OrderResponse;
 import com.example.backend.order.dto.OrderSheetDto;
 import com.example.backend.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,11 @@ public class OrderController {
         return new ResponseEntity(orderId, HttpStatus.OK);
     }
 
+    @GetMapping("/api/orders/{itemId}")
+    public ResponseEntity<List<OrderResponse>> getOrderSummery(@CookieValue(value = "token", required = false) String token, @PathVariable Long itemId) {
+        List<OrderResponse> byItemId = orderService.findByItemId(itemId);
+        return new ResponseEntity<>(byItemId,HttpStatus.OK);
+    }
     @GetMapping("/api/orders")
     public ResponseEntity<List<OrderSheetDto>> getOrders(@CookieValue(value = "token", required = false)String token) {
         List<OrderSheetDto> list = orderService.findByMemberId(jwtService.getId(token));

@@ -53,4 +53,10 @@ public class ItemService {
             itemRepository.save(item);
         }
     }
+
+    public List<ItemDto> findByMemberId(Long memberId) {
+        List<Item> bySellerId = itemRepository.findBySellerId(memberId);
+        ItemDto itemDto = new ItemDto();
+        return itemDto.toDtoList(bySellerId);
+    }
 }

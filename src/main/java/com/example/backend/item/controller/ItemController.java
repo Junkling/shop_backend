@@ -48,6 +48,12 @@ public class ItemController {
         return items;
     }
 
+    @GetMapping("/api/seller/items")
+    public List<ItemDto> getSellerItems(@CookieValue(name = "token") String token) {
+        Long id = jwtService.getId(token);
+        return itemService.findByMemberId(id);
+    }
+
     @Transactional
     @PostMapping("/api/seller/items")
     public ResponseEntity saveItem(@RequestPart ItemRequest itemRequest, @RequestPart(value = "image", required = false) MultipartFile image, @CookieValue(value = "token", required = false) String token) throws IOException {
