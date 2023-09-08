@@ -11,4 +11,8 @@ public class OrderSearchCond {
     private Long itemId;
     private Long sellerId;
     private String searchDate;
+
+    public void changeItemId(Long itemId) {
+        this.itemId = itemId;
+    }
 }

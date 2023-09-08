@@ -25,11 +25,12 @@ public class ItemQueryRepository {
 
     public List<Item> findItem(ItemSearchCond cond) {
         String name = cond.getName();
+        String sellerId = Long.toString(cond.getSellerId());
 //        String category = cond.getCategory();
         List<Item> items = query
                 .select(item)
                 .from(item)
-                .where(nameLike(name))
+                .where(nameLike(name),sellerIdSame(sellerId))
                 .orderBy(item.id.desc())
                 .fetch();
         return items;
@@ -39,6 +40,12 @@ public class ItemQueryRepository {
     private BooleanExpression nameLike(String name) {
         if (StringUtils.hasText(name)) {
             return item.name.like("%" + name + "%");
+        }
+        return null;
+    }
+    private BooleanExpression sellerIdSame(String sellerId) {
+        if (StringUtils.hasText(sellerId)) {
+            return item.sellerId.like(sellerId);
         }
         return null;
     }

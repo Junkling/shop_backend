@@ -9,5 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ItemSearchCond {
     private String name;
+    private Long sellerId;
     private String category;
+
+    public void changeSellerId(Long sellerId) {
+        this.sellerId = sellerId;
+    }
 }

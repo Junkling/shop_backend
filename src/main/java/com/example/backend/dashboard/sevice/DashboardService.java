@@ -25,16 +25,21 @@ public class DashboardService {
         return new ItemDto().toDtoList(itemRepository.findBySellerId(sellerId));
     }
 
-    public List<ItemDto> findByNameLike(ItemSearchCond cond) {
+    public List<ItemDto> findBySearchCond(ItemSearchCond cond) {
         return new ItemDto().toDtoList(itemQueryRepository.findItem(cond));
     }
 
-    public List<OrderResponse> findAllOrdersByItemId(Long itemId) {
-        return new OrderResponse().toDtoList(orderRepository.findByItemId(itemId));
+    public List<OrderResponse> findAllOrdersBySellerId(Long itemId) {
+        return new OrderResponse().toDtoList(orderRepository.findBySellerId(itemId));
     }
 
     public List<OrderResponse> findOrdersByItemIdAndTime(OrderSearchCond cond) {
         return new OrderResponse().toDtoList(orderQueryRepository.getOrderList(cond));
+    }
+
+    public boolean validSeller(Long sellerId, Long itemId) {
+        if(itemRepository.findById(itemId).orElseThrow().getSellerId()==sellerId) return true;
+        return false;
     }
 
 
