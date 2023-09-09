@@ -7,23 +7,28 @@ import com.example.backend.member.service.JwtServiceImpl;
 import com.example.backend.order.dto.OrderResponse;
 import com.example.backend.order.repository.OrderSearchCond;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class DashBoardController {
     private final DashboardService dashboardService;
     private final JwtServiceImpl jwtService;
 
     @GetMapping("/api/dashboard/items")
-    public List<ItemDto> searchItems(@CookieValue(name = "token") String token, ItemSearchCond cond) {
+    public List<ItemDto> getItems(@CookieValue(name = "token") String token) {
+        List<ItemDto> items = dashboardService.findBySellerId(jwtService.getId(token));
+        return items;
+    }
+    @PostMapping("/api/dashboard/items")
+    public List<ItemDto> searchItems(@RequestBody ItemSearchCond cond, @CookieValue(name = "token") String token) {
+        log.info("cond = {} ", cond.toString());
         cond.changeSellerId(jwtService.getId(token));
         List<ItemDto> items = dashboardService.findBySearchCond(cond);
         return items;

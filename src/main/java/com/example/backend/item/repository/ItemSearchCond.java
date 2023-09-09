@@ -15,4 +15,13 @@ public class ItemSearchCond {
     public void changeSellerId(Long sellerId) {
         this.sellerId = sellerId;
     }
+
+    @Override
+    public String toString() {
+        return "ItemSearchCond{" +
+                "name='" + name + '\'' +
+                ", sellerId=" + sellerId +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }
