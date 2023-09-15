@@ -28,7 +28,6 @@ public class DashBoardController {
     }
     @PostMapping("/api/dashboard/items")
     public List<ItemDto> searchItems(@RequestBody ItemSearchCond cond, @CookieValue(name = "token") String token) {
-        log.info("cond = {} ", cond.toString());
         cond.changeSellerId(jwtService.getId(token));
         List<ItemDto> items = dashboardService.findBySearchCond(cond);
         return items;

@@ -37,8 +37,7 @@ public class ItemController {
         if (!role.equals("seller")) throw new CustomException(ErrorCode.INVALID_PERMISSION);
     }
 
-    private void checkSeller(Long memberId, ItemDto dto, String role) {
-        checkAuth(role);
+    private void checkSeller(Long memberId, ItemDto dto) {
         if (memberId != dto.getMemberId()) throw new CustomException(ErrorCode.INVALID_PERMISSION);
     }
 
@@ -46,12 +45,6 @@ public class ItemController {
     public List<ItemDto> getItems() {
         List<ItemDto> items = itemService.findAll();
         return items;
-    }
-
-    @GetMapping("/api/seller/items")
-    public List<ItemDto> getSellerItems(@CookieValue(name = "token") String token) {
-        Long id = jwtService.getId(token);
-        return itemService.findByMemberId(id);
     }
 
     @Transactional
@@ -65,17 +58,25 @@ public class ItemController {
         return new ResponseEntity(save.getId(), HttpStatus.OK);
     }
 
+    @GetMapping("/api/seller/item/{itemId}")
+    public ResponseEntity getItem(@PathVariable String itemId, @CookieValue(name = "token") String token) {
+        log.info("param={}", itemId);
+        Long id = jwtService.getId(token);
+        long param = Long.parseLong(itemId);
+        checkSeller(id, itemService.findById(param));
+        return new ResponseEntity(itemService.findById(param), HttpStatus.OK);
+    }
     @Transactional
     @PostMapping("/api/seller/items/{itemId}")
     public ResponseEntity updateItem(@PathVariable Long itemId, @RequestBody ItemRequest req, @AuthenticationPrincipal MemberAdapter memberAdapter) {
-        checkSeller(memberAdapter.getId(), itemService.findById(itemId), memberAdapter.getRole());
+        checkSeller(memberAdapter.getId(), itemService.findById(itemId));
         itemService.update(itemId, req);
         return new ResponseEntity(itemService.findById(itemId), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/seller/items/{itemId}")
     public ResponseEntity deleteItem(@PathVariable Long itemId, @AuthenticationPrincipal MemberAdapter memberAdapter) {
-        checkSeller(memberAdapter.getId(), itemService.findById(itemId), memberAdapter.getRole());
+        checkSeller(memberAdapter.getId(), itemService.findById(itemId));
         itemService.delete(itemId);
         return new ResponseEntity(HttpStatus.OK);
     }
