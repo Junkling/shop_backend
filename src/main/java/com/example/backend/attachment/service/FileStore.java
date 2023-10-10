@@ -3,6 +3,7 @@ package com.example.backend.attachment.service;
 import com.example.backend.attachment.entity.Attachment;
 import com.example.backend.attachment.repository.AttachmentRepository;
 import com.example.backend.item.entity.Item;
+import com.example.backend.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @Slf4j
 public class FileStore {
     private final AttachmentRepository attachmentRepository;
+    private final ItemRepository itemRepository;
 
     @Value("${file.dir}")
     private String fileDir;

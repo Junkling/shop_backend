@@ -17,12 +17,12 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Slf4j
-public class JwtAuthenticationFilter  extends GenericFilterBean {
+public class JwtAuthenticationFilter extends GenericFilterBean {
     private final JwtServiceImpl jwtService;
 
     // Request Header 에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Auth");
+        String bearerToken = request.getHeader("token");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer") && bearerToken.length() > 6) {
             String substring = bearerToken.substring(7);
             return substring;

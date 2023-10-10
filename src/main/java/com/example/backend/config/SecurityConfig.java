@@ -58,7 +58,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .and()
             .authorizeRequests()
             .antMatchers().authenticated()
-            .antMatchers("/api/seller/items").hasRole("seller")
+//            .antMatchers("/api/seller/items").hasRole("seller")
 //            .antMatchers().permitAll()
             .anyRequest().permitAll()
             .and()

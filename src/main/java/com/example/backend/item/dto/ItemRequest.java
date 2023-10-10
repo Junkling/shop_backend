@@ -16,4 +16,15 @@ public class ItemRequest {
     private Integer price;
     private Integer discountPer;
     private Integer quantity;
+
+    @Override
+    public String toString() {
+        return "ItemRequest{" +
+                "name='" + name + '\'' +
+                ", imageFiles=" + imageFiles +
+                ", price=" + price +
+                ", discountPer=" + discountPer +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

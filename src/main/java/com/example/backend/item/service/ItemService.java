@@ -29,7 +29,6 @@ public class ItemService {
     public void update(Long itemId, ItemRequest req) {
         Item item = itemRepository.findById(itemId).orElseThrow();
         item.updateEntity(req);
-
     }
     public List<ItemDto> findByItemIds(List<Long> ids) {
         List<Item> byIdIn = itemRepository.findByIdIn(ids);

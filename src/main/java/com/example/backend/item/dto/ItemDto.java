@@ -36,6 +36,20 @@ public class ItemDto {
     }
 
     public void changeImgPath(String imgPath) {
+
         this.imgPath = imgPath;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", imgPath='" + imgPath + '\'' +
+                ", price=" + price +
+                ", discountPer=" + discountPer +
+                ", quantity=" + quantity +
+                ", memberId=" + memberId +
+                '}';
     }
 }

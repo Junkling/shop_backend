@@ -21,4 +21,13 @@ public class MemberDto {
         this.auth = auth;
     }
 
+    @Override
+    public String toString() {
+        return "MemberDto{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", auth='" + auth + '\'' +
+                '}';
+    }
 }

@@ -59,17 +59,18 @@ public class ItemController {
     }
 
     @GetMapping("/api/seller/item/{itemId}")
-    public ResponseEntity getItem(@PathVariable String itemId, @CookieValue(name = "token") String token) {
-        log.info("param={}", itemId);
+    public ResponseEntity getItem(@PathVariable Long itemId, @CookieValue(name = "token") String token) {
         Long id = jwtService.getId(token);
-        long param = Long.parseLong(itemId);
-        checkSeller(id, itemService.findById(param));
-        return new ResponseEntity(itemService.findById(param), HttpStatus.OK);
+//        checkSeller(id, itemService.findById(itemId));
+        ItemDto dto = itemService.findById(itemId);
+        return new ResponseEntity(dto, HttpStatus.OK);
     }
+
     @Transactional
-    @PostMapping("/api/seller/items/{itemId}")
-    public ResponseEntity updateItem(@PathVariable Long itemId, @RequestBody ItemRequest req, @AuthenticationPrincipal MemberAdapter memberAdapter) {
-        checkSeller(memberAdapter.getId(), itemService.findById(itemId));
+    @PostMapping("/api/seller/item/{itemId}")
+    public ResponseEntity updateItem(@PathVariable Long itemId, @RequestBody ItemRequest req, @RequestPart(value = "image", required = false) MultipartFile image, @CookieValue(value = "token", required = false) String token) throws IOException {
+        log.info("수정Item = {}",itemId);
+//        checkSeller(memberAdapter.getId(), itemService.findById(itemId));
         itemService.update(itemId, req);
         return new ResponseEntity(itemService.findById(itemId), HttpStatus.OK);
     }
