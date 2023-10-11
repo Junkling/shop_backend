@@ -66,6 +66,7 @@ public class JwtServiceImpl implements JwtService {
             } catch (ExpiredJwtException e) {
                 //만료
             } catch (JwtException e) {
+
                 //유효하지 않은 토큰
             }
         }
@@ -98,10 +99,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public Long getId(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(setSignKey())
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = Jwts.parserBuilder().setSigningKey(setSignKey()).build().parseClaimsJws(token).getBody();
         return claims == null ? 0 : principalDetailsService.getId(claims.getSubject());
     }
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
@@ -111,10 +109,7 @@ public class JwtServiceImpl implements JwtService {
     }
     // 토큰에서 회원 정보 추출
     public String getUserPk(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(setSignKey())
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = Jwts.parserBuilder().setSigningKey(setSignKey()).build().parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
 }

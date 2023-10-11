@@ -22,8 +22,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     // Request Header 에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("token");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer") && bearerToken.length() > 6) {
+        String bearerToken = request.getHeader("Auth");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             String substring = bearerToken.substring(7);
             return substring;
         }
@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 1. Request Header 에서 JWT 토큰 추출
         String token = resolveToken((HttpServletRequest) request);
         // 2. validateToken 으로 토큰 유효성 검사
-        if (token != null && jwtService.validateToken(token)) {
+        if (StringUtils.hasText(token) && jwtService.validateToken(token)) {
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
             Authentication authentication = jwtService.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
