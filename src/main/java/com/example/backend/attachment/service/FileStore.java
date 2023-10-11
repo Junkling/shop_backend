@@ -40,10 +40,17 @@ public class FileStore {
         }
     }
 
+    public void update(MultipartFile image, Long itemId) throws IOException {
+        Attachment byItemId = attachmentRepository.findByItemId(itemId);
+        log.info("이미지 id={}", byItemId.getId());
+        byItemId.setNotUse();
+        Attachment attachment = storeFile(image, itemRepository.findById(itemId).orElseThrow());
+        save(attachment);
+    }
+
     public String getFullPath(String fileName) {
         return fileDir + fileName;
     }
-
     public Attachment storeFile(MultipartFile multipartFile, Item item) throws IOException {
         if (multipartFile.isEmpty()) {
             return null;

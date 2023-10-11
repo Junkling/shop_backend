@@ -66,13 +66,17 @@ public class ItemController {
         return new ResponseEntity(dto, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping("/api/seller/item/{itemId}")
-    public ResponseEntity updateItem(@PathVariable Long itemId, @RequestBody ItemRequest req, @RequestPart(value = "image", required = false) MultipartFile image, @CookieValue(value = "token", required = false) String token) throws IOException {
-        log.info("수정Item = {}",itemId);
+    public ResponseEntity updateItem(@PathVariable Long itemId, @RequestPart ItemRequest itemRequest, @RequestPart(value = "image", required = false) MultipartFile image, @CookieValue(value = "token", required = false) String token) throws IOException {
+        log.info("수정Item = {}", itemId);
+        log.info("req = {}",itemRequest);
+        log.info("image={}",image);
 //        checkSeller(memberAdapter.getId(), itemService.findById(itemId));
-        itemService.update(itemId, req);
-        return new ResponseEntity(itemService.findById(itemId), HttpStatus.OK);
+        itemService.update(itemId, itemRequest);
+        if(image!=null){
+            fileStore.update(image, itemId);
+        }
+        return new ResponseEntity(itemService.findById(itemId).getId(), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/seller/items/{itemId}")

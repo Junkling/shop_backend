@@ -33,4 +33,8 @@ public class Attachment {
     public String getStoreName(){
         return this.storeName;
     }
+
+    public void setNotUse() {
+        this.item = null;
+    }
 }

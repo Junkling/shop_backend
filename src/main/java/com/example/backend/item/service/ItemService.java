@@ -21,6 +21,10 @@ public class ItemService {
         return new ItemDto().toDtoList(all);
     }
 
+    public Item findEntityByItemId(Long itemId) {
+        return itemRepository.findById(itemId).orElseThrow();
+    }
+
     public ItemDto findById(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow();
         return item.toDto();
@@ -29,6 +33,7 @@ public class ItemService {
     public void update(Long itemId, ItemRequest req) {
         Item item = itemRepository.findById(itemId).orElseThrow();
         item.updateEntity(req);
+        itemRepository.save(item);
     }
     public List<ItemDto> findByItemIds(List<Long> ids) {
         List<Item> byIdIn = itemRepository.findByIdIn(ids);
